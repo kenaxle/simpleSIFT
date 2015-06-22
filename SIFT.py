@@ -10,8 +10,9 @@ Created on Apr 1, 2015
 #
 ####################################################################
 
-import cv2
+import cv2 
 import numpy as np
+from cv2 import waitKey, DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS
 #from cv2  import INTER_LINEAR
 
 
@@ -54,8 +55,8 @@ finKPoints = np.empty([1,8],dtype = np.float)
 
 def getImage(url): 
     try:
-        imageRead = cv2.imread(url,cv2.CV_LOAD_IMAGE_GRAYSCALE)
-        image = cv2.resize(imageRead,(int(imageRead.shape[0]/0.5),int(imageRead.shape[1]/0.5)),0,0,INTER_LINEAR)
+        imageRead = cv2.imread(url, 0)
+        image = cv2.resize(imageRead,(int(imageRead.shape[0]/0.5),int(imageRead.shape[1]/0.5)),0,0)
         initImage = cv2.normalize(image.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
         return initImage, imageRead 
     except:
@@ -259,7 +260,7 @@ def Grad_Orient():
                 try:
                     tempOrient[i, j] = np.arctan((oStack[a, 2][i, j + 1] - oStack[a, 2][i, j - 1]) / (oStack[a, 2][i + 1, j] - oStack[a, 2][i - 1, j]))
                 except: 
-                    print"Exception: division by zero"
+                    print("Exception: division by zero")
         mStack[a] = tempGrad
         orStack[a] = tempOrient
                             
@@ -333,7 +334,8 @@ def SiftPoints(imageURL,displayImage):
         Orientation()
         if (displayImage):
             cPoints = convertKeyPoints(finKPoints)
-            outImage = cv2.drawKeypoints(origImage,cPoints,flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+            outImage = cv2.drawKeypoints(origImage,cPoints,-1,flags = DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+            
             
             #outImage = cv2.drawMatches(origImage,cPoints,None,None,None,-1,-1)
             return finKPoints, outImage
@@ -341,4 +343,39 @@ def SiftPoints(imageURL,displayImage):
     else:
         return None, None
    
-# def showMatches(image1, image2): 
+
+
+# def showMatches(image1URL, image2URL): 
+#     image1, origImage1 = getImage(image1URL)
+#     image2, origImage2 = getImage(image2URL)
+#     if not(image1 is None or image2 is None):
+#         BuildOctaves(image1)
+#         DiffOfGauss()    
+#         LocalExtrema()    
+#         KeyPointsFilter()   
+#         Grad_Orient()    
+#         Orientation()
+#         k1 = finKPoints
+#         
+#         BuildOctaves(image1)
+#         DiffOfGauss()    
+#         LocalExtrema()    
+#         KeyPointsFilter()   
+#         Grad_Orient()    
+#         Orientation()
+#         k2 = finKPoints
+#         
+#         outImage = cv2.drawMatches(origImage,cPoints,-1,flags = DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+#             
+#             
+#             #outImage = cv2.drawMatches(origImage,cPoints,None,None,None,-1,-1)
+#             return finKPoints, outImage
+#         return finKPoints, None
+#     
+#     else:
+#         return None, None
+    
+    
+    
+    
+    
